@@ -11,3 +11,20 @@ services:
     volumes:
       - "./web/:/gym_tracker"
     command: "go run ."
+    env_file:
+      - example.env
+    depends_on:
+      - db
+ 
+  db:
+    restart: always
+    image: postgres:latest
+    env_file: ./example.env
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - local_postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+  
+volumes:
+  local_postgres_data: {}

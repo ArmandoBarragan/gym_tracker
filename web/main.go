@@ -1,11 +1,17 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"fmt"
+
+	"github.com/ArmandoBarragan/gym_tracker/conf"
+	"github.com/ArmandoBarragan/gym_tracker/src/routes"
+	"github.com/gofiber/fiber/v2"
+)
 
 func main() {
+	var settings *conf.Settings = conf.InitSettings()
+	conf.InitDatabase(settings.DB_DSN)
 	app := fiber.New()
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-	app.Listen(":3000")
+	routes.Auth(app)
+	app.Listen(fmt.Sprintf(":%s", settings.PORT))
 }
